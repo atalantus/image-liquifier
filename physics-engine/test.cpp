@@ -7,6 +7,7 @@
 #include "collision.hpp"
 
 double err = 1e-12;
+uint32_t maxSteps = 100;
 
 bool DBLEQL(double a, double b)
 {
@@ -33,33 +34,34 @@ int main()
     assert(DBLEQL((e2.position - e3.position).magnitude(), 1));
     assert(DBLEQL((e1.position - e3.position).magnitude(), 2));
 
-    assert(!resolveCollision(e1, e3));
+    resolveCollision(e1, e3);
     assert((e1.position == Vec2{0, 0}));
     assert((e2.position == Vec2{1, 0}));
     assert((e3.position == Vec2{2, 0}));
     assert((e4.position == Vec2{99, 99}));
 
-    assert(resolveCollision(e1, e2));
+    resolveCollision(e1, e2);
     assert((e1.position == Vec2{-0.5, 0}));
     assert((e2.position == Vec2{1.5, 0}));
     assert((e3.position == Vec2{2, 0}));
     assert((e4.position == Vec2{99, 99}));
 
-    assert(!resolveCollision(e1, e2));
+    resolveCollision(e1, e2);
     assert((e1.position == Vec2{-0.5, 0}));
     assert((e2.position == Vec2{1.5, 0}));
     assert((e3.position == Vec2{2, 0}));
     assert((e4.position == Vec2{99, 99}));
 
-    assert(resolveCollision(e2, e3));
+    resolveCollision(e2, e3);
     assert((e1.position == Vec2{-0.5, 0}));
     assert((e2.position == Vec2{0.75, 0}));
     assert((e3.position == Vec2{2.75, 0}));
     assert((e4.position == Vec2{99, 99}));
 
-    uint64_t steps = 0;
-    while (iterateCollisions(entities1)) steps++;
-    std::cout << steps << std::endl;
+    for (int i = 0; i < maxSteps; ++i)
+        for (int j = 0; j < entities1.size(); ++j)
+            for (int k = j + 1; k < entities1.size(); ++k)
+                resolveCollision(entities1[j], entities1[k]);
 
     assert((e1.position == Vec2{-1, 0}));
     assert((e2.position == Vec2{1, 0}));
@@ -77,9 +79,15 @@ int main()
                                   {1,  -1}
     };
 
-    steps = 0;
-    while (iterateCollisions(entities2)) steps++;
-    std::cout << steps << std::endl;
+    for (int i = 0; i < maxSteps; ++i)
+        for (int j = 0; j < entities2.size(); ++j)
+            for (int k = j + 1; k < entities2.size(); ++k)
+                resolveCollision(entities2[j], entities2[k]);
 
-    assert(!iterateCollisions(entities2));
+    for (int j = 0; j < entities2.size(); ++j)
+        for (int k = j + 1; k < entities2.size(); ++k)
+        {
+            float dist = (entities2[j].position - entities2[k].position).magnitude();
+            assert((dist >= 1.0f));
+        }
 }

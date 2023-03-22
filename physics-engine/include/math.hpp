@@ -7,12 +7,17 @@ struct Vec2
     float x;
     float y;
 
-    float magnitude() const
+    Vec2() = default;
+
+    Vec2(float x, float y) : x{x}, y{y}
+    {}
+
+    [[nodiscard]] float magnitude() const
     {
         return std::sqrt(x * x + y * y);
     }
 
-    float sqrMagnitude() const
+    [[nodiscard]] float sqrMagnitude() const
     {
         return x * x + y * y;
     }
