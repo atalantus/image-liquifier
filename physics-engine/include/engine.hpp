@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include <cstdint>
 #include "entity.hpp"
 #include "constraint.hpp"
@@ -9,7 +8,7 @@
 struct Engine
 {
     /// sub step count
-    uint16_t subSteps = 1;
+    uint16_t subSteps = 0;
 
     /// total simulation time
     float time = 0.0f;
@@ -19,21 +18,18 @@ struct Engine
     float stepDt = 0.0f;
 
     /// gravity
-    Vec2 gravity = {0.0f, -10.0f};
+    Vec2 gravity = {0.0f, 1000.0f};
 
     /// entities
-    std::vector<Entity> entities;
+    Entity* entities = nullptr;
     /// world constraint
     BoxConstraint constraint{0, 0, 0, 0};
 
-    Engine& setSubStepCount(uint16_t subStepCount)
+    uint32_t entityCount = 0;
+
+    Engine& setUpdateRate(uint16_t updateRate, uint16_t subStepCount)
     {
         subSteps = subStepCount;
-        return *this;
-    }
-
-    Engine& setUpdateRate(uint16_t updateRate)
-    {
         updateDt = 1.0f / static_cast<float>(updateRate);
         stepDt = updateDt / static_cast<float>(subSteps);
         return *this;
@@ -47,7 +43,13 @@ struct Engine
 
     Engine& instantiateEntity(Vec2 position, Color color)
     {
-        entities.emplace_back(position, color);
+        entities[entityCount++] = {position, color};
+        return *this;
+    }
+
+    Engine& instantiateEntity(Vec2 position, Vec2 initialVelocity, Color color)
+    {
+        entities[entityCount++] = {position, color, initialVelocity, stepDt};
         return *this;
     }
 

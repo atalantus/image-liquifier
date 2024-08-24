@@ -1,7 +1,5 @@
 #pragma once
 
-#include <vector>
-
 struct BoxConstraint
 {
     float right, left, top, bottom;

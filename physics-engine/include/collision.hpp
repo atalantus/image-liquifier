@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <cmath>
 #include "entity.hpp"
 
 constexpr float precisionErr = 1e-6;

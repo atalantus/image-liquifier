@@ -14,7 +14,7 @@ struct Vec2
 
     [[nodiscard]] float magnitude() const
     {
-        return std::sqrt(x * x + y * y);
+        return sqrtf(x * x + y * y);
     }
 
     [[nodiscard]] float sqrMagnitude() const

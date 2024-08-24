@@ -11,6 +11,12 @@ set(SOURCES
 
 find_package(SFML 2 REQUIRED COMPONENTS network audio graphics window system)
 
+add_executable(physics_engine main.cpp ${SOURCES})
+target_link_libraries(physics_engine sfml-system sfml-window sfml-graphics)
+if (UNIX)
+    target_link_libraries(physics_engine pthread)
+endif (UNIX)
+
 add_executable(test_physics_engine test.cpp ${SOURCES})
 
 add_executable(benchmark_physics_engine benchmark.cpp ${SOURCES})

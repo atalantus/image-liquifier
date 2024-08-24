@@ -6,13 +6,13 @@ void Engine::update()
 
     for (uint16_t i = 0; i < subSteps; ++i)
     {
-        for (size_t j = 0; j < entities.size(); ++j)
+        for (size_t j = 0; j < entityCount; ++j)
         {
             Entity& entity = entities[j];
             // apply gravity
             entity.accelerate(gravity);
             // apply collisions
-            for (size_t k = j + 1; k < entities.size(); ++k)
+            for (size_t k = j + 1; k < entityCount; ++k)
                 resolveCollision(entity, entities[k]);
             // apply constraint
             entity.constrain(constraint);

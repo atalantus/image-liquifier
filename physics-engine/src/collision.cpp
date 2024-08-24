@@ -8,7 +8,7 @@ void resolveCollision(Entity& a, Entity& b)
     if (sqrDist > precisionErr && sqrDist < entityRadius * 4)
     {
         // calculate overlapping offset
-        float m = std::sqrt(sqrDist);
+        float m = sqrtf(sqrDist);
         float overlap = entityRadius * 2 - m;
         offset.x *= overlap / (2 * m);
         offset.y *= overlap / (2 * m);
